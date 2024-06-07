@@ -1,0 +1,50 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.feature_selection import mutual_info_classif
+
+train_df = pd.read_csv('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv')
+
+
+print("Missing values in the dataset:")
+print(train_df.isnull().sum())
+
+
+imputer = SimpleImputer(strategy='median')
+train_df['Age'] = imputer.fit_transform(train_df[['Age']])
+
+
+le = LabelEncoder()
+train_df['Sex'] = le.fit_transform(train_df['Sex'])
+train_df['Embarked'] = le.fit_transform(train_df['Embarked'].fillna('S'))
+
+
+print("\nDataset shape:", train_df.shape)
+print("\nDataset info:")
+print(train_df.info())
+print("\nDataset summary statistics:")
+print(train_df.describe())
+
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Survived', data=train_df)
+plt.title("Survival Count")
+plt.show()
+
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Sex', data=train_df)
+plt.title("Sex Distribution")
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Pclass', data=train_df)
+plt.title("Pclass Distribution")
+plt.show()
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x='Embarked', data=train_df)
+plt.title("Embarked Distribution")
